@@ -25,6 +25,37 @@ export const registerSchema = Joi.object({
       "string.min": "Password must be at least 12 characters",
       "string.pattern.name": "Password must contain at least one {#name}",
     }),
+
+  repwd: Joi.string()
+    .trim()
+    .min(12)
+    .pattern(/[A-Z]/, "uppercase letter")
+    .pattern(/[a-z]/, "lowercase letter")
+    .pattern(/[0-9]/, "number")
+    .pattern(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, "special character")
+    .required()
+    .messages({
+      "string.empty": "Password is required",
+      "string.min": "Password must be at least 12 characters",
+      "string.pattern.name": "Password must contain at least one {#name}",
+    }),
+});
+
+export const loginSchema = Joi.object({
+  email: Joi.string().trim().email().required().messages({
+    "string.empty": "Email is required",
+    "string.email": "Enter a valid email",
+  }),
+
+  password: Joi.string()
+    .trim()
+    .min(12)
+    .required()
+    .messages({
+      "string.empty": "Password is required",
+      "string.min": "Password must be at least 12 characters",
+      "string.pattern.name": "Password must contain at least one {#name}",
+    }),
 });
 
 export const validateRegisterInput = (req, res, next) => {

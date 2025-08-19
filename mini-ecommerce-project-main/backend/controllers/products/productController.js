@@ -1,6 +1,4 @@
 import productModel from "../../models/productModel.js";
-import userModel from "../../models/userModel.js";
-
 
 const toFiniteNumber = (v) => {
   if (v == null || v === "") return null; // treat empty as not-provided
@@ -93,32 +91,8 @@ const updateProduct = async (req, res) => {
       return res.status(404).json({ success: false, message: "Product not found!" });
     }
 
-    // Build update object only with fields that are explicitly provided
-    const update = {};
-
-    if (name !== undefined) update.name = String(name).trim();
-    if (description !== undefined) update.description = String(description);
-    if (imageUrl !== undefined) update.imageUrl = String(imageUrl).trim();
-
-    if (price !== undefined) {
-      const priceNum = toFiniteNumber(price);
-      if (!Number.isFinite(priceNum) || priceNum < 0) {
-        return res.status(400).json({ success: false, message: "Invalid price. Must be a non-negative number." });
-      }
-      update.price = priceNum;
-    }
-
-    if (stock !== undefined) {
-      const stockNum = toFiniteNumber(stock);
-      if (!Number.isFinite(stockNum) || stockNum < 0) {
-        return res.status(400).json({ success: false, message: "Invalid stock. Must be a non-negative number." });
-      }
-      update.stock = stockNum;
-    }
-
-    // If no fields provided
-    if (Object.keys(update).length === 0) {
-      return res.status(400).json({ success: false, message: "No valid fields provided to update." });
+    const update = {
+      name, description, price, stock, imageUrl
     }
 
     const updated = await productModel.findByIdAndUpdate(productId, update, { new: true });

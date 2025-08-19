@@ -1,4 +1,4 @@
-import userModel from "../../models/user/userModel.js";
+import userModel from '../../models/userModel.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 
@@ -14,7 +14,6 @@ const generateTokens = (userId) => {
 
 const registerUser = async (req,res) => {
     
-
     try {
         
         const { name , email , password , repwd } = req.body;

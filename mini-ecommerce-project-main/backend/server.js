@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
-import userRouter from './routes/user/userRouter.js';
+import userRouter from './routes/userRouter.js';
 import productRouter from './routes/productRouter.js';
 import orderRouter from './routes/orderRouter.js';
 import connectDB from './config/mongodb.js';
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors())
 
 //api endpoints
-app.use('/api/auth/',userRouter);
+app.use('/api/auth',userRouter);
 app.use('/api/products',productRouter);
 app.use('/api/orders',orderRouter);
 
