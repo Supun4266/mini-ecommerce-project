@@ -1,4 +1,18 @@
- function showLogin() {
+const hamburger = document.getElementById("hamburger");
+const sideNav = document.getElementById("side-nav");
+const closeBtn = document.getElementById("close-btn");
+
+hamburger.addEventListener("click", () => {
+  sideNav.style.width = "250px";
+});
+
+closeBtn.addEventListener("click", () => {
+  sideNav.style.width = "0";
+});
+
+
+
+function showLogin() {
       document.querySelector(".tab.active").classList.remove("active");
       document.querySelectorAll(".tab")[0].classList.add("active");
 
