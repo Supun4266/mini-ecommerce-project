@@ -1,31 +1,29 @@
 // dashboard.js
-// Simple admin product display / add / delete for your dashboard.html
-const BASE_URL = "http://localhost:4000"; // change if backend runs elsewhere
 
 // helpers
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
-const authHeaderForAdmin = () => {
+
+// Build Authorization header (preferred)
+const buildAuthHeader = (forJson = true) => {
   const a = localStorage.getItem("aToken");
-  if (!a) {
-    alert("Not signed in as admin. Redirecting to Signin.");
-    location.href = "Signin.html";
-    return null;
-  }
-  // default header used for JSON requests. We'll remove Content-Type when sending FormData.
-  return { "Content-Type": "application/json", "aToken": a };
+  if (!a) return null;
+  const headers = { "Authorization": `Bearer ${a}` };
+  if (forJson) headers["Content-Type"] = "application/json";
+  return headers;
 };
+
+// For GET product list: prefer user token if present, otherwise admin Authorization
 const authHeaderForGet = () => {
-  // GET /get-products expects uToken or authorization. Admin has only aToken -> send as Authorization.
   const u = localStorage.getItem("uToken");
   const a = localStorage.getItem("aToken");
   if (u) return { "Content-Type": "application/json", "uToken": u };
-  if (a) return { "Content-Type": "application/json", "authorization": `Bearer ${a}` };
+  if (a) return { "Content-Type": "application/json", "Authorization": `Bearer ${a}` };
   return { "Content-Type": "application/json" };
 };
+
 const fmt = (n) => (typeof n === "number" ? `$${n.toFixed(2)}` : `$${Number(n || 0).toFixed(2)}`);
 
-// Render products into the table body
 async function fetchProducts() {
   try {
     const headers = authHeaderForGet();
@@ -66,7 +64,7 @@ function renderProducts(products) {
 
     const catTd = document.createElement("td");
     catTd.className = "px-4 py-2 text-blue-500";
-    catTd.textContent = p.category || "-"; // if no category in schema show -
+    catTd.textContent = p.category || "-";
 
     const priceTd = document.createElement("td");
     priceTd.className = "px-4 py-2";
@@ -78,7 +76,6 @@ function renderProducts(products) {
 
     const actionsTd = document.createElement("td");
     actionsTd.className = "px-4 py-2";
-    // Edit link (optionally implement later) and delete button
     actionsTd.innerHTML = `
       <a href="#" data-id="${p._id}" class="text-blue-500 mr-3 edit-link">Edit</a>
       <button data-id="${p._id}" class="delete-btn text-red-500">Delete</button>
@@ -94,7 +91,7 @@ function renderProducts(products) {
     tbody.appendChild(tr);
   });
 
-  // attach delete handlers
+  // attach delete & edit handlers
   $$(".delete-btn").forEach((btn) => btn.addEventListener("click", onDeleteProduct));
   $$(".edit-link").forEach((a) => a.addEventListener("click", onEditProduct));
 }
@@ -105,8 +102,12 @@ async function onDeleteProduct(e) {
   if (!id) return;
   if (!confirm("Delete this product?")) return;
   try {
-    const headers = authHeaderForAdmin();
-    if (!headers) return;
+    const headers = buildAuthHeader(true);
+    if (!headers) {
+      alert("Not signed in as admin. Redirecting to Signin.");
+      location.href = "Signin.html";
+      return;
+    }
     const res = await fetch(`${BASE_URL}/api/products/delete-product/${id}`, {
       method: "DELETE",
       headers,
@@ -124,11 +125,12 @@ async function onDeleteProduct(e) {
   }
 }
 
-// Edit handler placeholder (you can expand)
+// Edit handler -> navigate to edit page with the id
 function onEditProduct(e) {
   e.preventDefault();
   const id = e.currentTarget.getAttribute("data-id");
-  alert("Edit not implemented yet. Product id: " + id);
+  if (!id) return;
+  location.href = `productEdit.html?id=${encodeURIComponent(id)}`;
 }
 
 // Add-product UX
@@ -165,7 +167,6 @@ async function onSubmitAddProduct(e) {
   const descEl = $("#ap-description");
   const priceEl = $("#ap-price");
   const stockEl = $("#ap-stock");
-  const urlEl = $("#ap-imageUrl");
   const fileEl = document.getElementById("ap-imageFile");
   const previewImg = document.getElementById("ap-imagePreview");
   const feedback = document.getElementById("ap-feedback");
@@ -176,17 +177,12 @@ async function onSubmitAddProduct(e) {
     return;
   }
 
-  const headersFromAuth = authHeaderForAdmin();
-  if (!headersFromAuth) return;
-
   const name = nameEl.value.trim();
   const description = descEl.value.trim();
   const price = priceEl.value.trim();
   const stock = stockEl.value.trim();
-  const imageUrlValue = urlEl ? urlEl.value.trim() : "";
   const file = fileEl && fileEl.files && fileEl.files[0];
 
-  // basic client-side checks
   if (!name || price === "" || stock === "") {
     alert("Please provide name, price and stock.");
     return;
@@ -197,66 +193,60 @@ async function onSubmitAddProduct(e) {
   if (!Number.isFinite(priceNum) || priceNum < 0) return alert("Invalid price");
   if (!Number.isFinite(stockNum) || stockNum < 0) return alert("Invalid stock");
 
-  // UI feedback
   feedback.textContent = "";
   submitBtn.disabled = true;
   const oldBtnText = submitBtn.textContent;
   submitBtn.textContent = "Saving...";
 
   try {
-    // Decide whether to send multipart (file present) or JSON
-    const useFormData = !!file;
+    const headersAuth = buildAuthHeader(false); // false => don't add JSON Content-Type
 
-    if (useFormData) {
+    if (!headersAuth) {
+      alert("Not signed in as admin. Redirecting to Signin.");
+      location.href = "Signin.html";
+      return;
+    }
+
+    if (file) {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
       formData.append("price", priceNum);
       formData.append("stock", stockNum);
-
-      // append file under field name "imageUrl" (matches upload.single("imageUrl"))
       formData.append("imageUrl", file, file.name);
 
-      // also append imageUrl text if provided (backend can prefer file over text)
-      if (imageUrlValue) formData.append("imageUrlUrl", imageUrlValue);
-
-      // prepare headers but remove Content-Type so browser can set multipart boundary
-      const headers = { ...headersFromAuth };
-      if (headers["Content-Type"]) delete headers["Content-Type"];
+      // Use admin auth header but do not set Content-Type (browser will set it)
+      const headers = { Authorization: headersAuth.Authorization };
 
       const res = await fetch(`${BASE_URL}/api/products/add-product`, {
         method: "POST",
         headers,
         body: formData,
       });
-
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         feedback.textContent = data.message || "Failed to add product";
         console.error("add product (formdata) error", data);
         return;
       }
-
       feedback.textContent = "Product added";
       toggleAddForm(false);
       await fetchProducts();
     } else {
-      // send JSON (no file). include imageUrl string if provided
-      const body = { name, description, price: priceNum, stock: stockNum, imageUrl: imageUrlValue };
-      const headers = { ...headersFromAuth }; // contains Content-Type: application/json
+      // send JSON without file
+      const body = { name, description, price: priceNum, stock: stockNum };
+      const headers = { Authorization: headersAuth.Authorization, "Content-Type": "application/json" };
       const res = await fetch(`${BASE_URL}/api/products/add-product`, {
         method: "POST",
         headers,
         body: JSON.stringify(body),
       });
-
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         feedback.textContent = data.message || "Failed to add product";
         console.error("add product (json) error", data);
         return;
       }
-
       feedback.textContent = "Product added";
       toggleAddForm(false);
       await fetchProducts();
@@ -267,7 +257,6 @@ async function onSubmitAddProduct(e) {
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = oldBtnText || "Save Product";
-    // clear preview if any
     if (previewImg) {
       previewImg.src = "";
       previewImg.classList.add("hidden");
@@ -277,14 +266,11 @@ async function onSubmitAddProduct(e) {
 
 // wire up UI
 document.addEventListener("DOMContentLoaded", () => {
-  // fetch products to display
   fetchProducts();
 
-  // add product button toggles the small form
   $("#add-product-btn")?.addEventListener("click", () => toggleAddForm(true));
   $("#ap-cancel")?.addEventListener("click", (e) => { e.preventDefault(); toggleAddForm(false); });
 
-  // file preview handling (if the file input exists on the page)
   const fileInput = document.getElementById("ap-imageFile");
   const previewImg = document.getElementById("ap-imagePreview");
   if (fileInput) {
@@ -300,6 +286,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // wire submit
   $("#ap-submit")?.addEventListener("click", onSubmitAddProduct);
 });

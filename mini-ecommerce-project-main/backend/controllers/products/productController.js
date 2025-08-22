@@ -92,28 +92,51 @@ const addProducts = async (req, res) => {
   }
 };
 
-
+// controllers/productsController.js (updateProduct)
 const updateProduct = async (req, res) => {
   try {
     const { productId } = req.params;
-    const { name, description, price, stock, imageUrl } = req.body;
+    const { name, description, price, stock, existingImageUrl } = req.body;
+    const imageFile = req.file; // may be undefined
 
     const productData = await productModel.findById(productId);
     if (!productData) {
       return res.status(404).json({ success: false, message: "Product not found!" });
     }
 
-    const update = {
-      name, description, price, stock, imageUrl
+    // prepare update object only with provided fields
+    const update = {};
+    if (typeof name !== "undefined") update.name = name;
+    if (typeof description !== "undefined") update.description = description;
+    if (typeof price !== "undefined") update.price = price;
+    if (typeof stock !== "undefined") update.stock = stock;
+
+    // if a new file was uploaded -> upload to Cloudinary, set imageUrl
+    if (imageFile) {
+      try {
+        const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+          resource_type: "image",
+        });
+        update.imageUrl = imageUpload.secure_url;
+      } catch (uploadErr) {
+        console.error("Cloudinary upload failed:", uploadErr);
+        return res.status(500).json({ success: false, message: "Image upload failed." });
+      }
+    } else if (existingImageUrl) {
+      // client provided an existing image URL to keep/use
+      update.imageUrl = existingImageUrl;
     }
+    // else: no change to imageUrl (retain existing productData.imageUrl)
 
     const updated = await productModel.findByIdAndUpdate(productId, update, { new: true });
     return res.status(200).json({ success: true, message: "Product updated successfully!", product: updated });
   } catch (error) {
-    console.error(error);
+    console.error("updateProduct error:", error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
 
 
 const deleteProduct = async (req,res) => {

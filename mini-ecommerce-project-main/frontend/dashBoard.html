@@ -110,6 +110,7 @@
             <input 
               type="text" 
               placeholder="Search orders" 
+              id="orderSearch"
               class="w-full border-none focus:ring-0 bg-gray-50 text-sm"
             />
           </div>
@@ -124,47 +125,8 @@
                 <th class="px-4 py-2 text-left">Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <tr class="border-t">
-                <td class="px-4 py-2">#12345</td>
-                <td class="px-4 py-2 text-blue-500">Alice Johnson</td>
-                <td class="px-4 py-2">2024-01-15</td>
-                <td class="px-4 py-2">Shipped</td>
-                <td class="px-4 py-2">$248</td>
-                <td class="px-4 py-2 text-blue-500">View</td>
-              </tr>
-              <tr class="border-t">
-                <td class="px-4 py-2">#12346</td>
-                <td class="px-4 py-2 text-blue-500">Bob Williams</td>
-                <td class="px-4 py-2">2024-01-20</td>
-                <td class="px-4 py-2">Processing</td>
-                <td class="px-4 py-2">$79</td>
-                <td class="px-4 py-2 text-blue-500">View</td>
-              </tr>
-              <tr class="border-t">
-                <td class="px-4 py-2">#12347</td>
-                <td class="px-4 py-2 text-blue-500">Charlie Davis</td>
-                <td class="px-4 py-2">2024-01-25</td>
-                <td class="px-4 py-2">Delivered</td>
-                <td class="px-4 py-2">$15</td>
-                <td class="px-4 py-2 text-blue-500">View</td>
-              </tr>
-              <tr class="border-t">
-                <td class="px-4 py-2">#12348</td>
-                <td class="px-4 py-2 text-blue-500">Diana Evans</td>
-                <td class="px-4 py-2">2024-02-01</td>
-                <td class="px-4 py-2">Shipped</td>
-                <td class="px-4 py-2">$29</td>
-                <td class="px-4 py-2 text-blue-500">View</td>
-              </tr>
-              <tr class="border-t">
-                <td class="px-4 py-2">#12349</td>
-                <td class="px-4 py-2 text-blue-500">Ethan Brown</td>
-                <td class="px-4 py-2">2024-02-05</td>
-                <td class="px-4 py-2">Cancelled</td>
-                <td class="px-4 py-2">$199</td>
-                <td class="px-4 py-2 text-blue-500">View</td>
-              </tr>
+            <tbody id="orderTableBody">
+              <!-- Orders will be injected here -->
             </tbody>
           </table>
         </div>
@@ -172,7 +134,12 @@
     </main>
   </div>
 
+  <script>
+    window.BASE_URL = "http://localhost:4000";
+  </script>
+
   <script src="dashboard.js"></script>
+  <script src="order.js"></script>
 
 </body>
 </html>

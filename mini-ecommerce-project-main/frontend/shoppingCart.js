@@ -127,7 +127,33 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("back-to-home")?.addEventListener("click", () => location.href = "home.html");
 
   // checkout (placeholder)
-  document.getElementById("checkout-btn")?.addEventListener("click", () => location.href = "checkOut.html");
+  // when user clicks Checkout -> store order info + navigate to Checkout page
+  document.getElementById("checkout-btn")?.addEventListener("click", () => {
+    const cart = readCart();
+    if (!cart || cart.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
+
+    // build minimal order payload for the checkout page
+    const subtotal = cart.reduce((s, it) => s + ((it.price || 0) * (it.quantity || 0)), 0);
+    const shipping = 0; // you can change this logic
+    const total = subtotal + shipping;
+
+    const checkoutData = {
+      items: cart.map(it => ({ productId: it.productId, quantity: it.quantity || 1, price: it.price || 0, name: it.name || "", imageUrl: it.imageUrl || "" })),
+      subtotal,
+      shipping,
+      total
+    };
+
+    // store in sessionStorage (short-lived)
+    sessionStorage.setItem("checkoutData", JSON.stringify(checkoutData));
+
+    // navigate to Checkout page (file name exactly as in your project)
+    location.href = "Checkout.html";
+  });
+
 
   renderCart();
 });

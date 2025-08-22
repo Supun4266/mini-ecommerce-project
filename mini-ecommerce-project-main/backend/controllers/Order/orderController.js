@@ -93,22 +93,44 @@ const addOrder = async (req, res) => {
 };
 
 //admin
-const getOrderDetails = async (req,res) => {
-    
-    try {
+const getOrderDetails = async (req, res) => {
+  try {
+    // fetch orders and populate user basic info (name/email)
+    const orders = await orderModel.find().sort({ createdAt: -1 }).populate("userId", "name email").lean();
 
-        const orderData = await orderModel.find();
-
-        if( orderData.length === 0 ){
-            res.status(200).json({ success: false, message: "No orders to display!." })
-        }
-
-        res.status(200).json({success:true,orderData});
-        
-    } catch (error) {
-        console.error("getOrder error:", error);
-        return res.status(500).json({ success: false, message: "Server error getting order." });
+    // if no orders, return empty array (success: true) — avoid sending two responses
+    if (!orders || orders.length === 0) {
+      return res.status(200).json({ success: true, orderData: [] });
     }
+
+    // get all orderIds and fetch their order items with product info in one query
+    const orderIds = orders.map((o) => o._id);
+    const items = await orderItemModel
+      .find({ orderId: { $in: orderIds } })
+      .populate("productId", "name price imageUrl")
+      .lean();
+
+    // group items by orderId
+    const itemsByOrder = items.reduce((acc, it) => {
+      const id = String(it.orderId);
+      if (!acc[id]) acc[id] = [];
+      acc[id].push(it);
+      return acc;
+    }, {});
+
+    // attach items and user summary to each order
+    const result = orders.map((o) => ({
+      ...o,
+      items: itemsByOrder[String(o._id)] || [],
+      // move populated userId to user for clarity
+      user: o.userId || null,
+    }));
+
+    return res.status(200).json({ success: true, orderData: result });
+  } catch (error) {
+    console.error("getOrder error:", error);
+    return res.status(500).json({ success: false, message: "Server error getting order." });
+  }
 };
 
 //user

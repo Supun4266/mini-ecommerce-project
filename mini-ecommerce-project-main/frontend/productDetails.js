@@ -1,6 +1,12 @@
 // productDetails.js
 const BASE_URL = "http://localhost:4000"; // update if backend is elsewhere
 
+// helpers
+const $ = (s) => document.querySelector(s);
+const formatPrice = (n) => {
+  const num = Number(n || 0);
+  return Number.isFinite(num) ? `$${num.toFixed(2)}` : "$0.00";
+};
 const getAuthHeaderIfPresent = () => {
   const u = localStorage.getItem("uToken");
   const a = localStorage.getItem("aToken");
@@ -14,126 +20,169 @@ function qs(name) {
   return url.searchParams.get(name);
 }
 
-function fmtPrice(n) {
-  const num = Number(n || 0);
-  if (!Number.isFinite(num)) return "$0.00";
-  return `$${num.toFixed(2)}`;
+// fetch product by id (matches your controller route)
+async function fetchProductById(id) {
+  if (!id) throw new Error("No product id provided");
+  const headers = getAuthHeaderIfPresent();
+  const url = `${BASE_URL}/api/products/get-products/${encodeURIComponent(id)}`;
+  const res = await fetch(url, { headers });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    const msg = data && (data.message || data.error) ? (data.message || data.error) : `Failed to fetch product (${res.status})`;
+    throw new Error(msg);
+  }
+  const data = await res.json();
+  if (!data || data.success === false) throw new Error(data && data.message ? data.message : "Failed to fetch product");
+  return data.product || data;
 }
 
-async function fetchProductById(id) {
-  try {
-    const headers = getAuthHeaderIfPresent(); // should return appropriate auth headers
-    if (!id) throw new Error("No product id provided");
+// render helpers
+function renderBasicInfo(p) {
+  $("#product-title").textContent = p.name || "Product";
+  $("#product-description").textContent = p.description || "";
+  $("#product-price").textContent = formatPrice(p.price);
+  $("#product-stock").textContent = typeof p.stock !== "undefined" ? `Stock: ${p.stock}` : "";
+  $("#product-image").src = p.imageUrl || "https://via.placeholder.com/800x600?text=No+Image";
+  $("#product-image").alt = p.name || "product image";
+  // breadcrumb category if exists
+  if (p.category) $("#breadcrumb-category").textContent = p.category;
+}
 
-    const url = `${BASE_URL}/api/products/get-products/${encodeURIComponent(id)}`;
-    const res = await fetch(url, { headers });
-
-    // unauthorized
-    if (res.status === 401) {
-      throw new Error("Unauthorized. Please sign in.");
-    }
-
-    // try parse JSON (may throw)
-    const data = await res.json().catch(() => null);
-
-    if (!res.ok) {
-      const msg = (data && (data.message || (data.error && data.error.message))) || res.statusText || "Failed to fetch product";
-      throw new Error(msg);
-    }
-
-    // expect { success: true, product }
-    if (!data) throw new Error("Empty response from server");
-    if (data.success === false) throw new Error(data.message || "Failed to fetch product");
-
-    return data.product || data; // return product object (fallback to raw data)
-  } catch (err) {
-    console.error("fetchProductById error:", err);
-    throw err;
+function renderDetailsGrid(p) {
+  const grid = $("#product-details-grid");
+  grid.innerHTML = "";
+  // Only show known keys — avoid dumping everything.
+  const details = [];
+  if (p.material) details.push(["Material", p.material]);
+  if (p.fit) details.push(["Fit", p.fit]);
+  if (p.brand) details.push(["Brand", p.brand]);
+  if (p.sku) details.push(["SKU", p.sku]);
+  // fallback: include price/stock redundantly (optional)
+  details.push(["Price", formatPrice(p.price)]);
+  if (typeof p.stock !== "undefined") details.push(["Stock", String(p.stock)]);
+  if (details.length === 0) {
+    grid.innerHTML = `<div class="text-slate-500">No additional details available.</div>`;
+    return;
+  }
+  for (const [k, v] of details) {
+    const el = document.createElement("div");
+    el.innerHTML = `<div class="text-xs text-blue-500">${k}</div><div class="text-sm">${v}</div>`;
+    grid.appendChild(el);
   }
 }
 
+function renderReviews(p) {
+  const list = $("#reviews-list");
+  const noReviews = $("#no-reviews");
+  list.innerHTML = "";
+  const reviews = Array.isArray(p.reviews) ? p.reviews : [];
+  if (!reviews.length) {
+    noReviews.style.display = "block";
+    return;
+  }
+  noReviews.style.display = "none";
+  for (const r of reviews) {
+    const card = document.createElement("div");
+    card.className = "bg-gray-50 p-3 rounded";
+    const name = r.name || r.userName || "Anonymous";
+    const date = r.date ? new Date(r.date).toLocaleDateString() : "";
+    const rating = r.rating ? `Rating: ${r.rating}/5` : "";
+    card.innerHTML = `<div class="flex justify-between items-center"><div class="font-semibold">${name}</div><div class="text-xs text-slate-500">${date}</div></div>
+                      <div class="text-sm mt-2">${r.comment || ""}</div>
+                      <div class="text-xs text-yellow-500 mt-2">${rating}</div>`;
+    list.appendChild(card);
+  }
+}
 
-function renderProduct(p) {
-  const main = document.querySelector("main") || document.getElementById("product-details-root");
-  if (!main) return;
+function renderRelated(p) {
+  const grid = $("#related-grid");
+  grid.innerHTML = "";
+  const related = Array.isArray(p.related) ? p.related : [];
+  if (!related.length) {
+    grid.innerHTML = `<div class="text-slate-500 col-span-3">No related products.</div>`;
+    return;
+  }
+  for (const r of related) {
+    const card = document.createElement("a");
+    card.href = `ProductDetails.html?id=${encodeURIComponent(r._id || r.id)}`;
+    card.className = "block bg-white p-2 rounded shadow-sm";
+    card.innerHTML = `
+      <div class="w-full h-36 bg-cover bg-center rounded" style="background-image:url('${r.imageUrl || "https://via.placeholder.com/320"}')"></div>
+      <div class="mt-2 text-sm font-medium">${r.name || ""}</div>
+      <div class="text-sm text-blue-500">${formatPrice(r.price)}</div>
+    `;
+    grid.appendChild(card);
+  }
+}
 
-  const imageUrl = p.imageUrl || "https://via.placeholder.com/640x480?text=No+Image";
+// cart helpers (keeps structure compatible with shoppingCart.js)
+function readCart() {
+  try { return JSON.parse(localStorage.getItem("cart") || "[]"); } catch { return []; }
+}
+function saveCart(cart) { localStorage.setItem("cart", JSON.stringify(cart)); }
+function updateCartCountUI() {
+  const total = readCart().reduce((s, it) => s + (it.quantity || 0), 0);
+  const el = document.getElementById("cart-count");
+  if (el) el.textContent = String(total);
+}
 
-  // build markup using Tailwind classes similar to your HTML
-  main.innerHTML = `
-    <div class="max-w-3xl mx-auto px-5 pb-12">
-      <div class="mb-6">
-        <img id="product-image" src="${imageUrl}" alt="${p.name || ""}" class="w-full rounded-lg shadow-sm object-cover" style="max-height:420px; width:100%;">
-      </div>
+// Add to cart behavior
+function wireAddToCart(product) {
+  const addBtn = $("#add-to-cart");
+  const qtyEl = $("#product-qty");
+  const feedback = $("#product-feedback");
 
-      <h1 id="product-title" class="text-2xl font-semibold mb-2">${p.name || ""}</h1>
-      <p id="product-description" class="text-sm text-gray-700 leading-relaxed mb-6">${p.description || ""}</p>
-
-      <div class="mb-4">
-        <p class="text-lg font-semibold">Price</p>
-        <p id="product-price" class="text-xl mb-4 text-blue-500">${fmtPrice(p.price)}</p>
-        <p class="text-sm text-gray-600">Stock: ${typeof p.stock !== "undefined" ? p.stock : "N/A"}</p>
-      </div>
-
-      <label class="block font-semibold mb-1">Quantity</label>
-      <div>
-        <input id="product-qty" type="number" min="1" value="1" class="w-100 px-10 py-2 border border-gray-300 rounded mb-4">
-      </div>
-      <button id="add-to-cart" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-6">
-        Add to Cart
-      </button>
-
-      <div id="product-feedback" class="text-sm mt-2"></div>
-    </div>
-  `;
-
-  // Add Add-to-Cart behavior (example: store in localStorage cart array)
-  const addBtn = document.getElementById("add-to-cart");
-  const qtyEl = document.getElementById("product-qty");
-  const feedback = document.getElementById("product-feedback");
-  addBtn?.addEventListener("click", () => {
+  addBtn.addEventListener("click", (e) => {
+    e.preventDefault();
     const qty = Number(qtyEl.value || 1);
     if (!Number.isFinite(qty) || qty <= 0) {
       feedback.textContent = "Please enter a valid quantity.";
+      feedback.style.color = "crimson";
       return;
     }
 
-    // simple localStorage cart: [{ id, name, price, qty, imageUrl }]
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const exist = cart.find((c) => c.id === (p._id || p.id));
-    if (exist) {
-      exist.qty += qty;
+    const cart = readCart();
+    const pid = String(product._id || product.id || "");
+    const idx = cart.findIndex((c) => c.productId === pid);
+    if (idx >= 0) {
+      cart[idx].quantity = (cart[idx].quantity || 0) + qty;
     } else {
       cart.push({
-        id: p._id || p.id,
-        name: p.name,
-        price: p.price,
-        qty,
-        imageUrl: p.imageUrl,
+        productId: pid,
+        name: product.name || "",
+        price: Number(product.price || 0),
+        quantity: qty,
+        imageUrl: product.imageUrl || ""
       });
     }
-    localStorage.setItem("cart", JSON.stringify(cart));
+    saveCart(cart);
+    updateCartCountUI();
     feedback.textContent = "Added to cart ✓";
-    // update cart count UI if exists
-    const cartCountEl = document.getElementById("cart-count");
-    if (cartCountEl) {
-      const total = cart.reduce((s, it) => s + Number(it.qty || 0), 0);
-      cartCountEl.textContent = String(total);
-    }
+    feedback.style.color = "green";
   });
 }
 
+// bootstrap
 document.addEventListener("DOMContentLoaded", async () => {
   try {
+    updateCartCountUI();
     const id = qs("id");
     if (!id) {
-      document.querySelector("main").innerHTML = "<div class='p-6 text-center text-red-600'>No product id provided.</div>";
+      $("#product-root").innerHTML = `<div class="p-6 text-red-600">Missing product id in URL.</div>`;
       return;
     }
-    const product = await fetchProductById(id);
-    renderProduct(product);
+    const p = await fetchProductById(id);
+
+    // Render dynamic sections
+    renderBasicInfo(p);
+    renderDetailsGrid(p);
+    renderReviews(p);
+    renderRelated(p);
+
+    // wire add-to-cart with product data
+    wireAddToCart(p);
   } catch (err) {
-    const main = document.querySelector("main") || document.body;
-    main.innerHTML = `<div class="p-6 text-center text-red-600">Failed to load product. ${err.message}</div>`;
+    console.error(err);
+    $("#product-root").innerHTML = `<div class="p-6 text-red-600">Failed to load product: ${err.message}</div>`;
   }
 });

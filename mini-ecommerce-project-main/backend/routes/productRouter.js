@@ -9,7 +9,7 @@ const productRouter = express.Router();
 productRouter.get("/get-products",authUser,getAllProducts);
 productRouter.get("/get-products/:productId",authUser,getProductsById);
 productRouter.post("/add-product",authAdmin,upload.single("imageUrl"),addProducts);
-productRouter.patch("/update-product/:productId",authAdmin,updateProduct);
+productRouter.patch("/update-product/:productId",upload.single("imageUrl"),authAdmin,updateProduct);
 productRouter.delete("/delete-product/:productId",authAdmin,deleteProduct);
 
 export default productRouter;
