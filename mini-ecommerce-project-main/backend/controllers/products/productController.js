@@ -1,4 +1,5 @@
 import productModel from "../../models/productModel.js";
+import { v2 as cloudinary } from "cloudinary";
 
 const toFiniteNumber = (v) => {
   if (v == null || v === "") return null; // treat empty as not-provided
@@ -44,11 +45,16 @@ const getProductsById = async (req,res) => {
 
 const addProducts = async (req, res) => {
   try {
-    const { name, description, price, stock, imageUrl } = req.body;
+    const { name, description, price, stock} = req.body;
+    const imageFile = req.file;
 
     // Basic required checks (explicit null/undefined checks)
-    if (name == null || description == null || price == null || stock == null || imageUrl == null) {
+    if (name == null || description == null || price == null || stock == null) {
       return res.status(400).json({ success: false, message: "Details missing. name, description, price, stock, imageUrl are required." });
+    }
+
+    if (!req.file) {
+      return res.json({ success: false, message: "Image file is required" });
     }
 
     // Coerce and validate numbers
@@ -62,12 +68,18 @@ const addProducts = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid stock. Must be a non-negative number." });
     }
 
+    //upload image to cloudinary
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+      resource_type: "image",
+    });
+    const image = imageUpload.secure_url;
+
     const productData = {
       name: String(name).trim(),
       description: String(description),
       price: priceNum,
       stock: stockNum,
-      imageUrl: String(imageUrl).trim(),
+      imageUrl: image,
     };
 
     const newProduct = new productModel(productData);
