@@ -1,0 +1,340 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Work+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>Stitch Design</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden" style='font-family: "Work Sans", "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf4] px-10 py-3">
+          <div class="flex items-center gap-4 text-[#0d141c]">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-[#0d141c] text-lg font-bold leading-tight tracking-[-0.015em]">Admin Panel</h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-[#0d141c] text-sm font-medium leading-normal" href="#">Dashboard</a>
+              <a class="text-[#0d141c] text-sm font-medium leading-normal" href="#">Products</a>
+              <a class="text-[#0d141c] text-sm font-medium leading-normal" href="#">Orders</a>
+              <a class="text-[#0d141c] text-sm font-medium leading-normal" href="#">Customers</a>
+              <a class="text-[#0d141c] text-sm font-medium leading-normal" href="#">Reports</a>
+            </div>
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+              style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD2ktmMuuFAL12r3fruNuspT8swxdCEtDoa5obIjRADhyAdrEHrssGilMAFStVEzmXI-WcqBLfmNkb4VAg_ubf4qp9UsRXizEY0_qij1USC2lrhNkqsoYFC6iM6qPP_PZoj0j1uzeJ8BjJuXE1EYedrsFUfx1oTAaiulAgp6USLozvTOiFG9h9YH1tZSP0IttPYPo8UmbZQGiyKjLoN8OHqmYJLTZ3agD-fIN7aOQZZLrCbpoAdDsbuQtr8GlZELpMuXhrNSLzovjQ2");'
+            ></div>
+          </div>
+        </header>
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+              <div class="flex min-w-72 flex-col gap-3">
+                <p class="text-[#0d141c] tracking-light text-[32px] font-bold leading-tight">Orders</p>
+                <p class="text-[#49719c] text-sm font-normal leading-normal">Manage and track all customer orders</p>
+              </div>
+            </div>
+            <div class="px-4 py-3">
+              <label class="flex flex-col min-w-40 h-12 w-full">
+                <div class="flex w-full flex-1 items-stretch rounded-xl h-full">
+                  <div
+                    class="text-[#49719c] flex border-none bg-[#e7edf4] items-center justify-center pl-4 rounded-l-xl border-r-0"
+                    data-icon="MagnifyingGlass"
+                    data-size="24px"
+                    data-weight="regular"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                      <path
+                        d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <input
+                    placeholder="Search orders"
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#0d141c] focus:outline-0 focus:ring-0 border-none bg-[#e7edf4] focus:border-none h-full placeholder:text-[#49719c] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                    value=""
+                  />
+                </div>
+              </label>
+            </div>
+            <div class="pb-3">
+              <div class="flex border-b border-[#cedbe8] px-4 gap-8">
+                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-[#3591f3] text-[#0d141c] pb-[13px] pt-4" href="#">
+                  <p class="text-[#0d141c] text-sm font-bold leading-normal tracking-[0.015em]">All</p>
+                </a>
+                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#49719c] pb-[13px] pt-4" href="#">
+                  <p class="text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">Pending</p>
+                </a>
+                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#49719c] pb-[13px] pt-4" href="#">
+                  <p class="text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">Shipped</p>
+                </a>
+                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#49719c] pb-[13px] pt-4" href="#">
+                  <p class="text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">Completed</p>
+                </a>
+              </div>
+            </div>
+            <div class="px-4 py-3 @container">
+              <div class="flex overflow-hidden rounded-xl border border-[#cedbe8] bg-slate-50">
+                <table class="flex-1">
+                  <thead>
+                    <tr class="bg-slate-50">
+                      <th class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 px-4 py-3 text-left text-[#0d141c] w-[400px] text-sm font-medium leading-normal">
+                        Order ID
+                      </th>
+                      <th class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 px-4 py-3 text-left text-[#0d141c] w-[400px] text-sm font-medium leading-normal">
+                        Customer
+                      </th>
+                      <th class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 px-4 py-3 text-left text-[#0d141c] w-[400px] text-sm font-medium leading-normal">
+                        Order Date
+                      </th>
+                      <th class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 px-4 py-3 text-left text-[#0d141c] w-[400px] text-sm font-medium leading-normal">
+                        Total Amount
+                      </th>
+                      <th class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 px-4 py-3 text-left text-[#0d141c] w-60 text-sm font-medium leading-normal">Status</th>
+                      <th class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 px-4 py-3 text-left text-[#0d141c] w-60 text-[#49719c] text-sm font-medium leading-normal">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-t border-t-[#cedbe8]">
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 h-[72px] px-4 py-2 w-[400px] text-[#0d141c] text-sm font-normal leading-normal">#12345</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        Sarah Johnson
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        2024-01-15
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">$150.00</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">Pending</span>
+                        </button>
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 h-[72px] px-4 py-2 w-60 text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">
+                        View Details
+                      </td>
+                    </tr>
+                    <tr class="border-t border-t-[#cedbe8]">
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 h-[72px] px-4 py-2 w-[400px] text-[#0d141c] text-sm font-normal leading-normal">#12346</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        Michael Brown
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        2024-01-16
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">$200.00</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">Shipped</span>
+                        </button>
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 h-[72px] px-4 py-2 w-60 text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">
+                        View Details
+                      </td>
+                    </tr>
+                    <tr class="border-t border-t-[#cedbe8]">
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 h-[72px] px-4 py-2 w-[400px] text-[#0d141c] text-sm font-normal leading-normal">#12347</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        Emily Davis
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        2024-01-17
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">$75.00</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">Completed</span>
+                        </button>
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 h-[72px] px-4 py-2 w-60 text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">
+                        View Details
+                      </td>
+                    </tr>
+                    <tr class="border-t border-t-[#cedbe8]">
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 h-[72px] px-4 py-2 w-[400px] text-[#0d141c] text-sm font-normal leading-normal">#12348</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        David Wilson
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        2024-01-18
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">$300.00</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">Pending</span>
+                        </button>
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 h-[72px] px-4 py-2 w-60 text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">
+                        View Details
+                      </td>
+                    </tr>
+                    <tr class="border-t border-t-[#cedbe8]">
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 h-[72px] px-4 py-2 w-[400px] text-[#0d141c] text-sm font-normal leading-normal">#12349</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        Olivia Green
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        2024-01-19
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">$120.00</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">Shipped</span>
+                        </button>
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 h-[72px] px-4 py-2 w-60 text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">
+                        View Details
+                      </td>
+                    </tr>
+                    <tr class="border-t border-t-[#cedbe8]">
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 h-[72px] px-4 py-2 w-[400px] text-[#0d141c] text-sm font-normal leading-normal">#12350</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        Liam Taylor
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        2024-01-20
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">$180.00</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">Completed</span>
+                        </button>
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 h-[72px] px-4 py-2 w-60 text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">
+                        View Details
+                      </td>
+                    </tr>
+                    <tr class="border-t border-t-[#cedbe8]">
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 h-[72px] px-4 py-2 w-[400px] text-[#0d141c] text-sm font-normal leading-normal">#12351</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        Sophia Clark
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        2024-01-21
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">$90.00</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">Pending</span>
+                        </button>
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 h-[72px] px-4 py-2 w-60 text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">
+                        View Details
+                      </td>
+                    </tr>
+                    <tr class="border-t border-t-[#cedbe8]">
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 h-[72px] px-4 py-2 w-[400px] text-[#0d141c] text-sm font-normal leading-normal">#12352</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        Noah Lewis
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        2024-01-22
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">$250.00</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">Shipped</span>
+                        </button>
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 h-[72px] px-4 py-2 w-60 text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">
+                        View Details
+                      </td>
+                    </tr>
+                    <tr class="border-t border-t-[#cedbe8]">
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 h-[72px] px-4 py-2 w-[400px] text-[#0d141c] text-sm font-normal leading-normal">#12353</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        Ava Walker
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        2024-01-23
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">$110.00</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">Completed</span>
+                        </button>
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 h-[72px] px-4 py-2 w-60 text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">
+                        View Details
+                      </td>
+                    </tr>
+                    <tr class="border-t border-t-[#cedbe8]">
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120 h-[72px] px-4 py-2 w-[400px] text-[#0d141c] text-sm font-normal leading-normal">#12354</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        Ethan Hall
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">
+                        2024-01-24
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480 h-[72px] px-4 py-2 w-[400px] text-[#49719c] text-sm font-normal leading-normal">$160.00</td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600 h-[72px] px-4 py-2 w-60 text-sm font-normal leading-normal">
+                        <button
+                          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-medium leading-normal w-full"
+                        >
+                          <span class="truncate">Pending</span>
+                        </button>
+                      </td>
+                      <td class="table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720 h-[72px] px-4 py-2 w-60 text-[#49719c] text-sm font-bold leading-normal tracking-[0.015em]">
+                        View Details
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <style>
+                          @container(max-width:120px){.table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-120{display: none;}}
+                @container(max-width:240px){.table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-240{display: none;}}
+                @container(max-width:360px){.table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-360{display: none;}}
+                @container(max-width:480px){.table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-480{display: none;}}
+                @container(max-width:600px){.table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-600{display: none;}}
+                @container(max-width:720px){.table-784e35af-9234-4bc6-bea5-5877ba0cb2d7-column-720{display: none;}}
+              </style>
+            </div>
+          </div>
+        </div>
+        <footer class="flex justify-center">
+          <div class="flex max-w-[960px] flex-1 flex-col">
+            <footer class="flex flex-col gap-6 px-5 py-10 text-center @container">
+              <p class="text-[#49719c] text-base font-normal leading-normal">@2024 Admin Panel. All rights reserved.</p>
+            </footer>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
