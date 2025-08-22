@@ -49,30 +49,38 @@ const registerUser = async (req,res) => {
 
 }
 
-const loginUser = async (req,res) => {
-    
-    try {
-        
-        const { email , password } = req.body;
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-        //find user by email
-        const user = await userModel.findOne({ email });
-
-        if( !user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(401).json({ success: false, message: "Invalid email or password" });
-        }
-
-        //generate tokens
-        const { accessToken } = generateTokens(user._id);
-
-        //send success response
-        res.status(200).json({ success: true , accessToken });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: "An error occurred during login" });
+    // Admin (fixed credentials in .env) — no DB lookup
+    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PWD) {
+      const token = jwt.sign(
+        { id: "admin", role: "admin", email },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+      );
+      return res.status(200).json({ success: true, aToken: token });
     }
-}
+
+    // Regular user
+    const user = await userModel.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ success: false, message: "Invalid email or password" });
+    }
+
+    const token = jwt.sign(
+      { id: String(user._id), role: "user", email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    return res.status(200).json({ success: true, uToken: token });
+  } catch (error) {
+    console.error("loginUser error:", error);
+    return res.status(500).json({ success: false, message: "An error occurred during login" });
+  }
+};
 
 export {
     registerUser,
