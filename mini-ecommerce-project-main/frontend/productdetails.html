@@ -69,6 +69,27 @@
             </div>
           </div>
 
+<!-- info -->
+            <div>
+              <h1 id="product-title" class="text-2xl font-semibold mb-2"></h1>
+              <p id="product-description" class="text-sm text-slate-700 mb-4"></p>
+
+              <div class="mb-4">
+                <div class="text-lg font-semibold">Price</div>
+                <div id="product-price" class="text-2xl text-blue-500 font-bold mt-1"></div>
+                <div id="product-stock" class="text-sm text-gray-600 mt-1"></div>
+              </div>
+
+              <label class="block font-medium mb-1">Quantity</label>
+              <div class="flex items-center gap-3 mb-4">
+                <input id="product-qty" type="number" min="1" value="1" class="w-24 px-3 py-2 border rounded" />
+                <button id="add-to-cart" class="bg-blue-600 text-white px-4 py-2 rounded">Add to Cart</button>
+              </div>
+
+              <div id="product-feedback" class="text-sm text-green-600"></div>
+            </div>
+          </div>
+
           <!-- details (dynamic) -->
           <section id="product-details" class="mt-6">
             <h2 class="font-semibold mb-2">Product Details</h2>
@@ -76,11 +97,7 @@
           </section>
 
           <!-- reviews -->
-          <section id="product-reviews" class="mt-6">
-            <h2 class="font-semibold mb-2">Customer Reviews</h2>
-            <div id="reviews-list" class="space-y-4 text-sm text-slate-700"></div>
-            <div id="no-reviews" class="text-slate-500">No reviews yet.</div>
-          </section>
+          
 
           <!-- related -->
           <section id="related-products" class="mt-6">
